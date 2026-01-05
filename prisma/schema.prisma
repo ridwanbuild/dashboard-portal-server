@@ -49,8 +49,8 @@ model Assets {
   name       String // laptop, mobile, etc
   serialNo   String   @unique
   assignedAt DateTime @default(now())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade) // onDelete: Cascade : DELETE USER INFO
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade) // onDelete: Cascade : DELETE USER INFO
 
   @@index([userId])
 }
@@ -62,22 +62,21 @@ model HappinessMessage {
   title   String
   message String   @db.Text
   sentAt  DateTime @default(now())
-  userId  String
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String?
+  user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 // Agreement
-
 model Agreement {
   id        String   @id @default(uuid())
   title     String
   content   String   @db.Text // "CEO Message" or "Annual Policy
   type      String // Policy, Agreement, Message
   createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }

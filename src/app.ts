@@ -1,7 +1,18 @@
-import express from "express"
+import express, { Request, Response } from "express";
+import { PostRoutes } from "./modules/routes";
 
-import cors from "cors"
 
-const app = express()
+const app = express();
 
-export default app
+app.use(express.json());
+
+// happiness message : api 
+app.use("/api/happinessMessage", PostRoutes);
+
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("darkstone server done");
+});
+
+
+export default app;

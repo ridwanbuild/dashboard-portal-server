@@ -1,4 +1,5 @@
 import app from "./app";
+
 import { prisma } from "./lib/prisma";
 
 const port = process.env.PORT || 5000;
@@ -12,15 +13,12 @@ async function main() {
       console.log("Server is running ' darkstone portal ", port);
     });
 
-
+    
   } catch (error) {
     console.log("An error occurred");
     await prisma.$disconnect();
     process.exit(1);
-
-
   }
 }
 
-
-main()
+main();
