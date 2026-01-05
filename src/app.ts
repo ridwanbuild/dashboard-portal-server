@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
-import { PostRoutes } from "./modules/routes";
+import { HappinessRoutes } from "./modules/happiness/happiness.routes";
+import { AssetsRoutes } from "./modules/assets/assets.route";
+import { AgreementRoutes } from "./modules/agreement/agreement.route";
 
 
 const app = express();
@@ -7,7 +9,13 @@ const app = express();
 app.use(express.json());
 
 // happiness message : api 
-app.use("/api/happinessMessage", PostRoutes);
+app.use("/api/happinessMessage", HappinessRoutes);
+
+app.use("/api/assets", AssetsRoutes);
+
+app.use("/api/agreement", AgreementRoutes );
+
+
 
 
 app.get("/", (req: Request, res: Response) => {

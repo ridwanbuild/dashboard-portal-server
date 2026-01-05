@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import { PostServices } from "./services";
+import { HappinessServices } from "./happiness.services";
 
-const createPost = async (req: Request, res: Response) => {
+
+const createMessage = async (req: Request, res: Response) => {
   try {
-    const result = await PostServices.createPostIntoDB(req.body);
+    const result = await HappinessServices.createMessageDB(req.body);
     res.status(200).json({
       success: true,
       message: "Controller: Post created successfully",
@@ -20,14 +21,14 @@ const createPost = async (req: Request, res: Response) => {
 
 
 const getAllMessage = async (req: Request, res: Response) => {
-  const result = await PostServices.getAllMessageDB();
+  const result = await HappinessServices.getAllMessageDB();
   res.status(200).json({ success: true, data: result });
 };
 
 
 const getSingleMessage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await PostServices.getSingleMessageDB(id as string);
+  const result = await HappinessServices.getSingleMessageDB(id as string);
   res.status(200).json({ success: true, data: result });
 };
 
@@ -35,7 +36,7 @@ const getSingleMessage = async (req: Request, res: Response) => {
 
 const updateMessage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await PostServices.updateMessageDB(id as string, req.body);
+  const result = await HappinessServices.updateMessageDB(id as string, req.body);
   res.status(200).json({ success: true, message: "Updated!", data: result });
 };
 
@@ -43,14 +44,14 @@ const updateMessage = async (req: Request, res: Response) => {
 
 const deleteMessage = async (req: Request, res: Response) => {
   const { id } = req.params;
-  await PostServices.deleteMessageDB(id as string);
+  await HappinessServices.deleteMessageDB(id as string);
   res.status(200).json({ success: true, message: "Deleted successfully!" });
 };
 
 
 
-export const PostController = {
-  createPost,
+export const HappinessController = {
+  createMessage,
   getAllMessage,
   getSingleMessage,
   updateMessage,
