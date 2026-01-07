@@ -13,7 +13,8 @@ datasource db {
   provider = "postgresql"
 }
 
-// role base 
+// --- USER ROLES ---
+// Defines the permission levels within the application
 
 enum Role {
   ADMIN
@@ -22,27 +23,41 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      Role     @default(EMPLOYEE)
+  id          String @id @default(uuid())
+  email       String @unique
+  name        String?
+  password    String?
+  departments String?
+  age         String?
+  salary      String?
+  phone       String?
+  role        Role   @default(EMPLOYEE)
+
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 
-  // data relations (assets, happinessMessage, agreements)
+  // RELATIONS: 
+  // One user can have multiple assets, messages, and agreements (1:N)
   assets            Assets[]
   happinessMessages HappinessMessage[]
   agreement         Agreement[]
-  emailVerified     Boolean            @default(false)
-  image             String?
-  sessions          Session[]
-  accounts          Account[]
+
+  // Auth status and profile
+  emailVerified Boolean @default(false)
+  image         String?
+
+  // BETTER AUTH RELATIONS:
+  // Connects the user to their active sessions and linked accounts (social logins)
+  sessions Session[]
+  accounts Account[]
 
   @@map("user")
 }
 
-// ASSETS
+// --- ASSETS ---
+// Tracks hardware assigned to users. 
+// "onDelete: Cascade" ensures that if a user is deleted, their asset assignment is also cleaned up.
 
 model Assets {
   id         String   @id @default(uuid())
@@ -50,17 +65,19 @@ model Assets {
   serialNo   String   @unique
   assignedAt DateTime @default(now())
   userId     String?
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade) // onDelete: Cascade : DELETE USER INFO
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  // Indexing userId speeds up lookups like "find all assets for this user"
   @@index([userId])
 }
 
-// HAPPINESS 
+// --- HAPPINESS FEEDBACK ---
+// Stores messages regarding employee satisfaction
 
 model HappinessMessage {
   id      String   @id @default(uuid())
   title   String
-  message String   @db.Text
+  message String   @db.Text // @db.Text allows for long-form content beyond 255 chars
   sentAt  DateTime @default(now())
   userId  String?
   user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -68,18 +85,23 @@ model HappinessMessage {
   @@index([userId])
 }
 
-// Agreement
+// --- AGREEMENTS & POLICIES ---
+// Handles documents like "CEO Message" or "Annual Policy" that users need to view
+
 model Agreement {
   id        String   @id @default(uuid())
   title     String
-  content   String   @db.Text // "CEO Message" or "Annual Policy
-  type      String // Policy, Agreement, Message
+  content   String   @db.Text
+  type      String // Category: Policy, Agreement, or Message
   createdAt DateTime @default(now())
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
+
+// --- BETTER AUTH: SESSION ---
+// Tracks active logged-in devices/browsers
 
 model Session {
   id        String   @id
@@ -96,6 +118,9 @@ model Session {
   @@index([userId])
   @@map("session")
 }
+
+// --- BETTER AUTH: ACCOUNT ---
+// Stores OAuth provider data (e.g., if the user logs in via Google/GitHub)
 
 model Account {
   id                    String    @id
@@ -116,6 +141,9 @@ model Account {
   @@index([userId])
   @@map("account")
 }
+
+// --- BETTER AUTH: VERIFICATION ---
+// Used for email verification codes or password reset tokens
 
 model Verification {
   id         String   @id

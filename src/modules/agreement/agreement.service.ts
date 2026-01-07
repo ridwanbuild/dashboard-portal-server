@@ -1,31 +1,25 @@
 import { prisma } from "../../lib/prisma";
 
-// create Agreement DB
-const createAgreementDB = async (postData: {
-  title: string;
-  type: string;
-  content: string;
-  userId?: string;
-}) => {
+// create Agreement 
+const createAgreementDB = async (postData: any) => {
   return await prisma.agreement.create({
     data: postData,
   });
 };
 
-// GET Agreement db
+// GET all Agreements
 const getAgreementDB = async () => {
   return await prisma.agreement.findMany();
 };
 
-// Get Agreement single db
+// Get single Agreement
 const getAgreementID = async (id: string) => {
   return await prisma.agreement.findUnique({
     where: { id },
   });
 };
 
-
-// Agreement update
+// Update Agreement
 const updateAgreement = async (id: string, payload: any) => {
   return await prisma.agreement.update({
     where: { id },
@@ -33,15 +27,12 @@ const updateAgreement = async (id: string, payload: any) => {
   });
 };
 
-
-
+// Delete Agreement
 const deleteAgreement = async (id: string) => {
   return await prisma.agreement.delete({
     where: { id },
   });
 };
-
-
 
 export const AgreementServices = {
   createAgreementDB,

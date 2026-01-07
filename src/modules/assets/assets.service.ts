@@ -12,6 +12,7 @@ const createAssetsDB = async (postData: {
 
 };
 
+
 // GET assets db
 const getAssetsDB = async () => {
   return await prisma.assets.findMany();
