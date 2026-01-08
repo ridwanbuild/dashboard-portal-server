@@ -105,6 +105,8 @@ const deleteAssets = async (req: Request, res: Response) => {
   }
 };
 
+
+
 export const AssetsControlled = {
   createAssets,
   getAssets,

@@ -31,7 +31,14 @@ model User {
   age         String?
   salary      String?
   phone       String?
-  role        Role   @default(EMPLOYEE)
+  role   String?   @default("EMPLOYEE")
+
+
+
+  banned       Boolean?  @default(false)
+  banReason    String?
+  banExpires   DateTime?
+
 
   createdAt DateTime @default(now())
 

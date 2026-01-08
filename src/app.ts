@@ -11,11 +11,9 @@ import middleAuth from "./middleware/middleware";
 const app = express();
 app.use(express.json());
 
-
-
 app.use(
   cors({
-    origin: process.env.APP_AUTH_URL,
+    origin: process.env.APP_AUTH_URL || "http://localhost:3000",
     credentials: true,
   })
 );
@@ -24,13 +22,11 @@ app.use(
 
 
 
+
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 // happiness message : api
-app.use(
-  "/api/happinessMessage", middleAuth(), 
-  HappinessRoutes
-);
+app.use("/api/happinessMessage", middleAuth(), HappinessRoutes);
 
 app.use("/api/assets", AssetsRoutes);
 
@@ -39,6 +35,5 @@ app.use("/api/agreement", AgreementRoutes);
 app.get("/", (req: Request, res: Response) => {
   res.send("darkstone server done");
 });
-
 
 export default app;
