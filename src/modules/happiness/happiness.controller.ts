@@ -4,6 +4,9 @@ import { HappinessServices } from "./happiness.services";
 
 const createMessage = async (req: Request, res: Response) => {
   try {
+
+    console.log(req.user)
+
     const result = await HappinessServices.createMessageDB(req.body);
     res.status(200).json({
       success: true,
