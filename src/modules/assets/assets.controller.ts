@@ -20,7 +20,12 @@ const createAssets = async (req: Request, res: Response) => {
 
 const getAssets = async (req: Request, res: Response) => {
   try {
-    const result = await AssetsServices.getAssetsDB();
+    // UPDATE: Using 'as any' to bypass TypeScript error for req.user
+    const user = req.user as any;
+
+    // UPDATE: Passing the user object to the service (Argument fix for role-based filtering)
+    const result = await AssetsServices.getAssetsDB(user);
+    
     res.status(200).json({
       success: true,
       message: "Assets retrieved successfully! 📊",
@@ -38,10 +43,17 @@ const getAssets = async (req: Request, res: Response) => {
 const getSingleData = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const result = await AssetsServices.getAssetsID(id as string);
+    // UPDATE: Extracting user data for security verification
+    const user = req.user as any;
+
+    // UPDATE: Passing both the asset ID and the user object to the service
+    const result = await AssetsServices.getAssetsID(id as string, user);
     
     if (!result) {
-      return res.status(404).json({ success: false, message: "Asset not found! 🔍" });
+      return res.status(404).json({ 
+        success: false, 
+        message: "Asset not found or unauthorized! 🔍" 
+      });
     }
 
     res.status(200).json({

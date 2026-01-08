@@ -20,7 +20,12 @@ const createAgreement = async (req: Request, res: Response) => {
 
 const getAgreement = async (req: Request, res: Response) => {
   try {
-    const result = await AgreementServices.getAgreementDB();
+    // UPDATE: Extract user from request and cast as any to bypass TS checks
+    const user = req.user as any;
+
+    // UPDATE: Pass user object to service for role-based data filtering
+    const result = await AgreementServices.getAgreementDB(user);
+    
     res.status(200).json({
       success: true,
       message: "Agreements fetched successfully! 📂",
@@ -38,12 +43,16 @@ const getAgreement = async (req: Request, res: Response) => {
 const getAgreementData = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const result = await AgreementServices.getAgreementID(id as string);
+    // UPDATE: Extract user for authorization check
+    const user = req.user as any;
+
+    // UPDATE: Pass both ID and user object to verify ownership
+    const result = await AgreementServices.getAgreementID(id as string, user);
 
     if (!result) {
       return res.status(404).json({
         success: false,
-        message: "Agreement not found! 🔍",
+        message: "Agreement not found or Unauthorized! 🔍",
       });
     }
 
@@ -95,8 +104,6 @@ const deleteAgreement = async (req: Request, res: Response) => {
     });
   }
 };
-
-
 
 export const AgreementControlled = {
   createAgreement,
