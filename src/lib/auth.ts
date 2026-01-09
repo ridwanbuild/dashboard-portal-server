@@ -41,7 +41,6 @@ export const auth = betterAuth({
           return {
             data: {
               ...user,
-
               role:
                 rawRole.toUpperCase() === "USER" || !rawRole
                   ? "EMPLOYEE"

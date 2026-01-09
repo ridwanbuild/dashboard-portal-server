@@ -7,7 +7,6 @@ const router = express.Router();
 // Create an asset
 router.post("/", middleAuth(UserRole.ADMIN), AssetsControlled.createAssets);
 
-
 // Get all assets
 router.get("/", middleAuth(UserRole.ADMIN), AssetsControlled.getAssets);
 
@@ -15,10 +14,10 @@ router.get("/", middleAuth(UserRole.ADMIN), AssetsControlled.getAssets);
 router.get("/:id", middleAuth(UserRole.MANAGER, UserRole.EMPLOYEE), AssetsControlled.getSingleData);
 
 
-// Update an asset (Changed to PATCH) 🛠️
+// Update an asset (Changed to PATCH) 
 router.patch("/:id", middleAuth(UserRole.ADMIN), AssetsControlled.updateAssets);
 
-// Delete an asset (Changed to DELETE) 🗑️
+// Delete an asset (Changed to DELETE) 
 router.delete("/:id", middleAuth(UserRole.ADMIN), AssetsControlled.deleteAssets);
 
 

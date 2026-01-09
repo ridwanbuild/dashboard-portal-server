@@ -50,24 +50,19 @@ const middleAuth = (...Role: UserRole[]) => {
       role: session.user.role as string,
     };
 
-
-    if(Role.length && !Role.includes(req.user.role as UserRole)){
-
+    if (Role.length && !Role.includes(req.user.role as UserRole)) {
       return res.status(403).json({
         success: false,
         message: "Forbidden ! you don't have permission to access this!",
       });
-
     }
 
 
+    
+
     // console.log(session);
     next();
-    
   };
 };
 
-
-
-
-export default middleAuth 
+export default middleAuth;

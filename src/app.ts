@@ -7,6 +7,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import middleAuth from "./middleware/middleware";
+import { adminRouter } from "./router/admin.routes";
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,8 @@ app.use(
 
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
+
+app.use('/admin', adminRouter);
 
 // happiness message : api
 app.use("/api/happinessMessage", middleAuth(), HappinessRoutes);
