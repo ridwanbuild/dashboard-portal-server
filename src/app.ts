@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.APP_AUTH_URL || "http://localhost:3000",
+    origin: process.env.APP_AUTH_URL || "https://dashboard-portal-client.vercel.app",
     credentials: true,
   })
 );
