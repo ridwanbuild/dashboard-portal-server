@@ -23,26 +23,21 @@ enum Role {
 }
 
 model User {
-  id          String @id @default(uuid())
-  email       String @unique
-  name        String?
-  password    String?
-  departments String?
-  age         String?
-  salary      String?
-  phone       String?
-  role   String?   @default("EMPLOYEE")
-
-  banned       Boolean?  @default(false)
-  banReason    String?
-  banExpires   DateTime?
-
+  id         String    @id @default(uuid())
+  email      String    @unique
+  name       String?
+  password   String?
+  role       String?   @default("EMPLOYEE")
+  banned     Boolean?  @default(false)
+  banReason  String?
+  banExpires DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // RELATIONS: 
   // One user can have multiple assets, messages, and agreements (1:N)
+  employeeProfile   EmployeeProfile?
   assets            Assets[]
   happinessMessages HappinessMessage[]
   agreement         Agreement[]
@@ -63,11 +58,29 @@ model User {
 // Tracks hardware assigned to users. 
 // "onDelete: Cascade" ensures that if a user is deleted, their asset assignment is also cleaned up.
 
+model EmployeeProfile {
+  id          String  @id @default(uuid())
+  departments String?
+  age         String?
+  salary      String?
+  phone       String?
+  address     String?
+
+  // Connection to User
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("employee_profile")
+}
+
+
+
 model Assets {
   id         String   @id @default(uuid())
   name       String // laptop, mobile, etc
   serialNo   String   @unique
   assignedAt DateTime @default(now())
+  department  String?
   userId     String?
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -83,6 +96,7 @@ model HappinessMessage {
   title   String
   message String   @db.Text // @db.Text allows for long-form content beyond 255 chars
   sentAt  DateTime @default(now())
+  department  String?
   userId  String?
   user    User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -97,6 +111,7 @@ model Agreement {
   title     String
   content   String   @db.Text
   type      String // Category: Policy, Agreement, or Message
+  department  String?
   createdAt DateTime @default(now())
   userId    String?
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)

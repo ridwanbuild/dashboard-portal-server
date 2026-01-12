@@ -7,14 +7,15 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import middleAuth from "./middleware/middleware";
-import { adminRouter } from "./router/admin.routes";
+import { adminRouter } from "./modules/user.router/admin.routes";
+import { EmployeeRoutes } from "./modules/employee/employee.route";
 
 const app = express();
 app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.APP_AUTH_URL || "https://dashboard-portal-client.vercel.app",
+    origin: process.env.APP_AUTH_URL || "http://localhost:3000",
     credentials: true,
   })
 );
@@ -22,11 +23,11 @@ app.use(
 
 
 
-
-
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use('/admin', adminRouter);
+
+app.use('/api/employee', EmployeeRoutes);
 
 // happiness message : api
 app.use("/api/happinessMessage", middleAuth(), HappinessRoutes);

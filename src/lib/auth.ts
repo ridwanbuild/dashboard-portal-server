@@ -25,7 +25,7 @@ export const auth = betterAuth({
 
 
 
-  trustedOrigins: [process.env.APP_AUTH_URL || "https://dashboard-portal-client.vercel.app"],
+  trustedOrigins: [process.env.APP_AUTH_URL || "http://localhost:3000"],
 
   plugins: [admin()],
 
