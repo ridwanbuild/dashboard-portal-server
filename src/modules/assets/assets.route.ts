@@ -17,6 +17,7 @@ router.get("/:id", middleAuth(UserRole.MANAGER, UserRole.EMPLOYEE), AssetsContro
 // Update an asset (Changed to PATCH) 
 router.patch("/:id", middleAuth(UserRole.ADMIN, UserRole.MANAGER), AssetsControlled.updateAssets);
 
+
 // Delete an asset (Changed to DELETE) 
 router.delete("/:id", middleAuth(UserRole.ADMIN), AssetsControlled.deleteAssets);
 

@@ -12,7 +12,6 @@ const createAssetsDB = async (postData: {
       name: postData.name,
       serialNo: postData.serialNo,
       department: postData.department,
-      
       userId: postData.userId || null, 
     },
   });

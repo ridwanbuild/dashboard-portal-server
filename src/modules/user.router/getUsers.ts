@@ -16,7 +16,7 @@ export async function getAllUserForAdmin() {
       orderBy: { createdAt: "desc" }
     });
 
-    // এখানে সরাসরি users (Array) পাঠান, users[0] নয়
+    
     return { success: true, data: users }; 
   } catch (error) {
     console.error("Error fetching users:", error);
